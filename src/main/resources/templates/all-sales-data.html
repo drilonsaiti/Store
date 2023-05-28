@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">    <title>Welcome and Chose a Course</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+          crossorigin="anonymous"></script>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style type="text/css">
+    header{
+      width: 800px;
+      margin: auto;
+    }
+
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .footer {
+      background-color: #333;
+      color: white;
+      padding: 10px;
+    }
+    main{
+      width: 800px;
+      margin: auto;
+      flex: 1;
+    }
+    .white-text a {
+      color: white !important;
+    }
+
+    .koha{
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Store</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto white-text">
+      <li class="nav-item white-text" >
+        <a class="nav-link" href="/products">Products</a>
+      </li>
+      <li class="nav-item white-text">
+        <a class="nav-link" href="/products/add">Add new Product</a>
+      </li>
+      <li class="nav-item white-text">
+        <a class="nav-link" href="/sales">Sales</a>
+      </li>
+      <li class="nav-item white-text">
+        <a class="nav-link" href="/all-sales">All sales</a>
+      </li>
+      <li class="nav-item white-text">
+        <a class="nav-link" href="/top-products">Top products</a>
+      </li>
+      <li class="nav-item white-text">
+        <a class="nav-link btn btn-success rounded-pill" href="/open-store">Start Day</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<header>
+  <h1>Courses List</h1>
+  <div class="col mb-3">
+    <div class="row">
+      <p class="h3" th:text="${'Data me '} + ${data} + ${' hapur ne oren '} + ${koha} + ${' mbyllur ne oren '} + ${closed}"></p>
+
+    </div>
+  </div>
+</header>
+
+<main class="content">
+  <h3 th:text="${'Llojet e produkteve te shitura: '} + ${sales.size()}"></h3>
+  <h3 th:text="${'Fitimi i pergjithshem: '} + ${totalProfit}"></h3>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">Emri i produktit</th>
+        <th scope="col">Shitjet</th>
+        <th scope="col">Fitimi</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="sale : ${sales}">
+        <td th:text="${sale.getName()}"></td>
+        <td th:text="${sale.getQuantity()}"></td>
+        <td th:text="${sale.getProfit()}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+<footer class="footer bg-dark text-white">
+  <div class="container">
+    <div class="row justify-content-center white-text">
+      <ul class="list-inline mb-0">
+        <li class="list-inline-item"><a class="nav-link white-text" href="#">Products</a></li>
+        <li class="list-inline-item"><a class="nav-link white-text" href="#">Add new Product</a></li>
+        <li class="list-inline-item"><a  class="nav-link white-text" href="#">Sales</a></li>
+      </ul>
+    </div>
+    <div class="container text-center">
+      <span>&copy; 2023 Your Company. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

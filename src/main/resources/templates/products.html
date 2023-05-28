@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">    <title>Welcome and Chose a Course</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <style type="text/css">
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+        main{
+            width: 800px;
+            margin: auto;
+            flex: 1;
+        }
+        .white-text a {
+            color: white !important;
+        }
+
+        .koha{
+            display: inline-block;
+        }
+    </style>
+
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto white-text">
+                <li class="nav-item white-text" >
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+                <li class="nav-item white-text">
+                    <a class="nav-link" href="/products/add">Add new Product</a>
+                </li>
+                <li class="nav-item white-text">
+                    <a class="nav-link" href="/sales">Sales</a>
+                </li>
+                <li class="nav-item white-text">
+                    <a class="nav-link" href="/all-sales">All sales</a>
+                </li>
+                <li class="nav-item white-text">
+                    <a class="nav-link" href="/top-products">Top products</a>
+                </li>
+                <li class="nav-item white-text">
+                    <a class="nav-link btn btn-success rounded-pill" href="/open-store">Start Day</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+</header>
+
+<main class="content">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Products Name</th>
+                <th scope="col">Cmimi</th>
+                <th scope="col">Sasia</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.getName()}"></td>
+                <td th:text="${product.getPrice()}"></td>
+                <td th:text="${product.getQuantity()}"></td>
+               <td class="text-right">
+                   <form th:method="get" th:action="@{/products/details/{id}/{name} (id=${product.getId()},name=${product.getName()})}">
+                       <button type="submit" class="btn btn-sm btn-primary">
+                           <i class="fa fa-info">&nbsp; Details</i>
+                       </button>
+                   </form>
+                   <a th:href="@{'/products/{id}/edit' (id=${product.getId()})}"
+                      class="btn btn-info edit-balloon" ><i
+                           font-color="white" class="fa fa-edit"> &nbsp;Edit</i></a>
+
+                   <form th:action="@{'/products/delete/{id}' (id=${product.getId()})}">
+                       <button type="submit" class="btn btn-sm btn-danger delete-balloon"><i
+                               class="fa fa-trash">&nbsp; Delete</i>
+                       </button>
+                   </form>
+
+
+               </td>
+
+                    <!--<a class="btn btn-sm btn-primary"
+                       th:href="@{'/course/edit-form/{id}' (id=${course.getCourseId()})}"> <i class="fa fa-edit">Edit</i>
+                    </a>
+                    <form th:method="POST" th:action="@{'/AddStudent'}">
+                        <input type="hidden"  name="courseId" th:value="${course.getCourseId()}">
+                        <button class="btn btn-sm btn-success"> <i class="fa fa-add">Add student</i>
+                        </button>
+                    </form>
+
+                </td>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer class="footer bg-dark text-white">
+    <div class="container">
+        <div class="row justify-content-center white-text">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item"><a class="nav-link white-text" href="#">Products</a></li>
+                <li class="list-inline-item"><a class="nav-link white-text" href="#">Add new Product</a></li>
+                <li class="list-inline-item"><a  class="nav-link white-text" href="#">Sales</a></li>
+            </ul>
+        </div>
+        <div class="container text-center">
+            <span>&copy; 2023 Your Company. All rights reserved.</span>
+        </div>
+    </div>
+</footer>
+
+
+
+</body>
+</html>
