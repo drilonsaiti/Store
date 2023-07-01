@@ -119,8 +119,9 @@ public class ProductsServiceImpl implements ProductsService {
 		for (Sales s : sales){
 			System.out.println(s);
 			int quantity = s.getQuantityByProductId().get(id);
-			int price = s.getPricePerProduct().get(id);
-			list.add(new ProductsByDateDto(name,s.getOpen(),quantity,quantity*price));
+			double price = s.getPricePerProduct().get(id);
+			double purchase_price = s.getPricePerPurchaseProduct().get(id);
+			list.add(new ProductsByDateDto(name,s.getOpen(),quantity,quantity*price,quantity * purchase_price));
 		}
 		return list;
 	}

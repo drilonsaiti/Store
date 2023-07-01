@@ -78,7 +78,7 @@ public class SalesController {
 
     @GetMapping("all-sales")
     public String getAllSales(Model model){
-        List<Sales> sales = this.salesService.findAll();
+        List<Sales> sales = this.salesService.findAll().stream().sorted(Comparator.comparing(Sales::getClosed).reversed()).toList();
         model.addAttribute("sales",sales);
 
         return "all-sales";
@@ -100,7 +100,8 @@ public class SalesController {
         model.addAttribute("closed",closed);
 
         model.addAttribute("sales",list);
-        model.addAttribute("totalProfit",list.stream().mapToInt(ProductQuantityDto::getProfit).sum());
+        model.addAttribute("totalProfit",list.stream().mapToDouble(ProductQuantityDto::getProfit).sum());
+        model.addAttribute("pureProfit",list.stream().mapToDouble(ProductQuantityDto::getPure_profit).sum());
         return "all-sales-data";
     }
     @GetMapping("top-products")
@@ -122,7 +123,7 @@ public class SalesController {
         return "top-products";
     }
 
-    @GetMapping("test")
+    /*@GetMapping("test")
     public void test(){
         List<Object[]> queryResult = this.salesRepository.list(1L);
         List<ProductQuantityDto> productQuantityDtos = new ArrayList<>();
@@ -135,5 +136,5 @@ public class SalesController {
         }
 
         productQuantityDtos.forEach(System.out::println);
-    }
+    }*/
 }

@@ -27,9 +27,14 @@ public class Sales {
     private Map<Long, Integer> quantityByProductId;
 
     @Column(name = "pricePerProdcuts", length = 999)
-    @ElementCollection(targetClass=Integer.class)
+    @ElementCollection(targetClass=Double.class)
     @MapKeyColumn(name="Product_Id")
-    private Map<Long, Integer> pricePerProduct;
+    private Map<Long, Double> pricePerProduct;
+
+    @Column(name = "pricePerProdcuts", length = 999)
+    @ElementCollection(targetClass=Double.class)
+    @MapKeyColumn(name="Product_Id")
+    private Map<Long, Double> pricePerPurchaseProduct;
 
     @Column(name = "open", length = 999)
     private LocalDateTime open;

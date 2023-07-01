@@ -70,7 +70,8 @@ public class ProductsController {
         model.addAttribute("products",list);
         model.addAttribute("name",name);
         model.addAttribute("totalQuantity",list.stream().mapToInt(ProductsByDateDto::getQuantity).sum());
-        model.addAttribute("totalProfit",list.stream().mapToInt(ProductsByDateDto::getProfit).sum());
+        model.addAttribute("totalProfit",list.stream().mapToDouble(ProductsByDateDto::getProfit).sum());
+        model.addAttribute("pureProfit",list.stream().mapToDouble(ProductsByDateDto::getPureProfit).sum());
         return "details";
     }
 }

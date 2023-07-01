@@ -5,15 +5,15 @@ public class TopProductQuantityAndProfitDto {
     String name;
     int quantity;
 
-    int profit;
+    double profit;
 
-    public TopProductQuantityAndProfitDto(String name, int quantity, int profit) {
+    public TopProductQuantityAndProfitDto(String name, int quantity, double profit) {
         this.name = name;
         this.quantity = quantity;
         this.profit += profit;
     }
 
-    public int getProfit() {
+    public double getProfit() {
         return profit;
     }
 

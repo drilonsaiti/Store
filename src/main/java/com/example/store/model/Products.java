@@ -23,7 +23,10 @@ public class Products {
 	private String name;
 
 	@Column(name = "price", length = 999)
-	private int price;
+	private double price;
+
+	@Column(name = "purchase_price", length = 999)
+	private double purchase_price;
 
 	@Column(name = "quantity", length = 999)
 	private int quantity;

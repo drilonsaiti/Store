@@ -66,7 +66,9 @@ public class SalesServiceImpl implements SalesService {
         Products products = this.prodcutsRepository.findById(id).orElseThrow(()->new ProductNotFoundException(id));
         if (sales.getQuantityByProductId().get(products.getId()) == null){
             sales.getPricePerProduct().put(products.getId(),products.getPrice());
+            sales.getPricePerPurchaseProduct().put(products.getId(), products.getPurchase_price());
         }
+
         sales.getQuantityByProductId().put(products.getId(), sales.getQuantityByProductId().getOrDefault(products.getId(),0) + quantity);
         this.salesRepository.save(sales);
 
@@ -84,8 +86,10 @@ public class SalesServiceImpl implements SalesService {
 
         for (Map.Entry<Long, Integer> entry : map.entrySet()) {
             Products products = this.prodcutsRepository.findById(entry.getKey()).orElseThrow();
-            int price = sales.getPricePerProduct().get(products.getId());
-            productQuantityDtos.add(new ProductQuantityDto(products.getName(), entry.getValue(),price*entry.getValue()));
+            double price = sales.getPricePerProduct().get(products.getId());
+            double purchase_price = sales.getPricePerPurchaseProduct().get(products.getId());
+            double pureProfit = entry.getValue() * purchase_price;
+            productQuantityDtos.add(new ProductQuantityDto(products.getName(), entry.getValue(),price*entry.getValue(),pureProfit));
         }
         return productQuantityDtos;
     }
@@ -124,13 +128,13 @@ public class SalesServiceImpl implements SalesService {
         for (Sales s : sales){
             for (Map.Entry<Long, Integer> entry : s.getQuantityByProductId().entrySet()){
                 map.put( entry.getKey(),map.getOrDefault(entry.getKey(),0) + entry.getValue());
-                int price = s.getPricePerProduct().get(entry.getKey());
+                double price = s.getPricePerProduct().get(entry.getKey());
                 Products products = this.prodcutsRepository.findById(entry.getKey()).orElseThrow();
                 if (!saleMap.containsKey(entry.getKey())) {
                     saleMap.put(entry.getKey(), new TopProductQuantityAndProfitDto(products.getName(), map.get(entry.getKey()), price * entry.getValue()));
                 }else{
                     TopProductQuantityAndProfitDto topProduct = saleMap.get(entry.getKey());
-                    int profit = topProduct.getProfit() + (price * entry.getValue());
+                    double profit = topProduct.getProfit() + (price * entry.getValue());
                     topProduct = new TopProductQuantityAndProfitDto(products.getName(), map.get(entry.getKey()),profit);
                     saleMap.put(entry.getKey(), topProduct);
                 }

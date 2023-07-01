@@ -8,12 +8,15 @@ public class ProductsByDateDto {
     LocalDateTime day;
     int quantity;
 
-    int profit;
+    double profit;
 
-    public ProductsByDateDto(String name,LocalDateTime day, int quantity, int profit) {
+    double pureProfit;
+
+    public ProductsByDateDto(String name,LocalDateTime day, int quantity, double profit,double pureProfit) {
         this.day = day;
         this.quantity = quantity;
         this.profit = profit;
+        this.pureProfit = pureProfit;
     }
 
     public LocalDateTime getDay() {
@@ -24,8 +27,12 @@ public class ProductsByDateDto {
         return quantity;
     }
 
-    public int getProfit() {
+    public double getProfit() {
         return profit;
+    }
+
+    public double getPureProfit() {
+        return pureProfit;
     }
 
     public String getDate(){
