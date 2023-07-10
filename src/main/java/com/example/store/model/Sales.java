@@ -7,7 +7,9 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -20,21 +22,13 @@ public class Sales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Key - Product id,value - quantity (sales for that product)
-    @Column(name = "quantityByProductId", length = 999)
-    @ElementCollection(targetClass=Integer.class)
-    @MapKeyColumn(name="Product_Id")
-    private Map<Long, Integer> quantityByProductId;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "sales_id")
+    private List<Sale> sales;
 
-    @Column(name = "pricePerProdcuts", length = 999)
-    @ElementCollection(targetClass=Double.class)
-    @MapKeyColumn(name="Product_Id")
-    private Map<Long, Double> pricePerProduct;
+    private double totalProfit;
 
-    @Column(name = "pricePerProdcuts", length = 999)
-    @ElementCollection(targetClass=Double.class)
-    @MapKeyColumn(name="Product_Id")
-    private Map<Long, Double> pricePerPurchaseProduct;
+    private double pureProfit;
 
     @Column(name = "open", length = 999)
     private LocalDateTime open;
@@ -43,7 +37,7 @@ public class Sales {
     private LocalDateTime closed;
 
     public Sales() {
-        this.quantityByProductId = new HashMap<>();
+        this.sales = new ArrayList<>();
         this.open = LocalDateTime.now();
         this.closed = null;
     }

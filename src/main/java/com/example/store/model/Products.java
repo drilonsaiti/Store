@@ -31,4 +31,7 @@ public class Products {
 	@Column(name = "quantity", length = 999)
 	private int quantity;
 
+	@Column(name = "barCode", length = 999)
+	private Long barCode;
+
 }

@@ -84,7 +84,6 @@
   </div>
 </nav>
 <header>
-  <h1>Courses List</h1>
   <div class="col mb-3">
     <div class="row">
       <p class="h3" th:text="${'Data me '} + ${data} + ${' hapur ne oren '} + ${koha} + ${' mbyllur ne oren '} + ${closed}"></p>
@@ -104,6 +103,7 @@
         <th scope="col">Emri i produktit</th>
         <th scope="col">Shitjet</th>
         <th scope="col">Fitimi</th>
+        <th scope="col">Fitimi i paster</th>
       </tr>
       </thead>
 
@@ -112,6 +112,7 @@
         <td th:text="${sale.getName()}"></td>
         <td th:text="${sale.getQuantity()}"></td>
         <td th:text="${sale.getProfit()}"></td>
+        <td th:text="${sale.getPure_profit()}"></td>
       </tr>
       </tbody>
     </table>
