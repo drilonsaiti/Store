@@ -30,15 +30,21 @@ public class ProductsServiceImpl implements ProductsService {
 	}
 
 	@Override
-	public void createProduct(String name, int price, int quantity) {
-		this.productsRepository.insertProduct(name,price,quantity);
+	public void createProduct(Products products) {
+		this.productsRepository.save(products);
 	}
 
 	@Override
-	public Products updateProduct(Long id, String name, int price, int quantity) {
-		this.productsRepository.updateProduct(id,name,price,quantity);
-		return this.productsRepository.findById(id).orElseThrow();
+	public Products updateProduct(Long id, Products products) {
+		Products existingProduct = this.productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+		existingProduct.setName(products.getName());
+		existingProduct.setPrice(products.getPrice());
+		existingProduct.setPurchase_price(products.getPurchase_price());
+		existingProduct.setQuantity(products.getQuantity());
+		existingProduct.setBarCode(products.getBarCode());
+		return this.productsRepository.save(existingProduct);
 	}
+
 
 	@Override
 	public void deleteProduct(Long id) {
@@ -114,15 +120,16 @@ public class ProductsServiceImpl implements ProductsService {
 	}
 
 	public List<ProductsByDateDto> productsByDate(Long id, String name) {
-		List<ProductsByDateDto> list = new ArrayList<>();
-		List<Sales> sales = this.salesRepository.findAll().stream().filter(s -> s.getQuantityByProductId().containsKey(id)).collect(Collectors.toList());
-		for (Sales s : sales){
-			System.out.println(s);
-			int quantity = s.getQuantityByProductId().get(id);
-			double price = s.getPricePerProduct().get(id);
-			double purchase_price = s.getPricePerPurchaseProduct().get(id);
-			list.add(new ProductsByDateDto(name,s.getOpen(),quantity,quantity*price,quantity * purchase_price));
-		}
-		return list;
+//		List<ProductsByDateDto> list = new ArrayList<>();
+//		List<Sales> sales = this.salesRepository.findAll().stream().filter(s -> s.getQuantityByProductId().containsKey(id)).collect(Collectors.toList());
+//		for (Sales s : sales){
+//			System.out.println(s);
+//			int quantity = s.getQuantityByProductId().get(id);
+//			double price = s.getPricePerProduct().get(id);
+//			double purchase_price = s.getPricePerPurchaseProduct().get(id);
+//			list.add(new ProductsByDateDto(name,s.getOpen(),quantity,quantity*price,quantity * purchase_price));
+//		}
+//		return list;
+		return new ArrayList<>();
 	}
 }

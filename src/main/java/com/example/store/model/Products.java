@@ -34,4 +34,11 @@ public class Products {
 	@Column(name = "barCode", length = 999)
 	private Long barCode;
 
+	public Products(String name, double price, double purchase_price, int quantity, Long barCode) {
+		this.name = name;
+		this.price = price;
+		this.purchase_price = purchase_price;
+		this.quantity = quantity;
+		this.barCode = barCode;
+	}
 }

@@ -1,11 +1,16 @@
 package com.example.store.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ProductToSale")
+@Data
+@NoArgsConstructor
+
 public class ProductToSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +26,10 @@ public class ProductToSale {
 
     private double purchasePrice;
 
-    // Constructors, getters, and setters
+    public ProductToSale(Products product, double price, double purchasePrice) {
+        this.product = product;
+        this.date = LocalDateTime.now();
+        this.price = price;
+        this.purchasePrice = purchasePrice;
+    }
 }

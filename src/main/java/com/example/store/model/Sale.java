@@ -1,12 +1,18 @@
 package com.example.store.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "Sale")
+@Data
+@NoArgsConstructor
+
 public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +26,9 @@ public class Sale {
 
     private double total;
 
-    // Constructors, getters, and setters
+    public Sale(List<ProductToSale> products, double total) {
+        this.products = products;
+        this.total = total;
+        this.date = LocalDateTime.now();
+    }
 }

@@ -27,8 +27,8 @@ public interface ProductsService {
 
 	public List<ProductsByDateDto> productsByDate(Long id, String name);
 
-	void createProduct(String name,int price,int quantity);
-	 Products updateProduct(Long id, String name, int price, int quantity);
+	void createProduct(Products products);
+	 Products updateProduct(Long id, Products products);
 
 	void deleteProduct(Long id);
 

@@ -1,77 +1,81 @@
 package com.example.store.controllers;
 
-
 import com.example.store.model.Products;
-import com.example.store.model.dto.ProductsByDateDto;
+import com.example.store.model.dto.ProductsDto;
+import com.example.store.model.exceptions.NotFoundException;
 import com.example.store.service.ProductsService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/products")
 public class ProductsController {
 
-    private final ProductsService prodcutsService;
+    private final ProductsService productsService;
 
-    public ProductsController(ProductsService prodcutsService) {
-        this.prodcutsService = prodcutsService;
+    public ProductsController(ProductsService productsService) {
+        this.productsService = productsService;
     }
 
     @GetMapping
-    public String getProducts(Model model){
-        List<Products> productsList = this.prodcutsService.getAll();
-        model.addAttribute("products",productsList);
-
-        return "products";
-    }
-    @GetMapping("add")
-    public String addAgencies(Model model) {
-
-
-        return "add-product";
+    public ResponseEntity<List<Products>> getProducts() {
+        try {
+            List<Products> productsList = this.productsService.getAll();
+            return ResponseEntity.ok(productsList);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public String addProducts(@RequestParam  String name,@RequestParam int price,@RequestParam int quantity){
-        this.prodcutsService.createProduct(name, price, quantity);
-        return "redirect:/products";
-
+    public ResponseEntity<Void> addProducts(@RequestBody ProductsDto productsDto) {
+        try {
+            Products products = new Products(productsDto.getName(), productsDto.getPrice(), productsDto.getPurchasePrice(), productsDto.getQuantity(), productsDto.getBarCode());
+            this.productsService.createProduct(products);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-
-    @GetMapping("/{id}/edit")
-    public String showEdit(@PathVariable Long id,Model model) {
-        Products product = this.prodcutsService.getById(id).orElseThrow();
-
-        model.addAttribute("product",product);
-        return "add-product";
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Products> getProductById(@PathVariable Long id) {
+        try {
+            Optional<Products> product = this.productsService.getById(id);
+            if (product.isPresent()) {
+                return ResponseEntity.ok(product.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PostMapping("/{id}")
-    public String update(@PathVariable Long id,@RequestParam  String name,@RequestParam int price,@RequestParam int quantity){
-        this.prodcutsService.updateProduct(id,name, price, quantity);
-        return "redirect:/products";
-
+    @PutMapping("/{id}")
+    public ResponseEntity<Products> updateProduct(@PathVariable Long id, @RequestBody ProductsDto productsDto) {
+        try {
+            Products products = new Products(productsDto.getName(), productsDto.getPrice(), productsDto.getPurchasePrice(), productsDto.getQuantity(), productsDto.getBarCode());
+            Products updatedProduct = this.productsService.updateProduct(id, products);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
-        this.prodcutsService.deleteProduct(id);
-        return "redirect:/products";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        try {
+            this.productsService.deleteProduct(id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/details/{id}/{name}")
-    public String getDetails(@PathVariable Long id, @PathVariable String name , Model model){
-        List<ProductsByDateDto> list = this.prodcutsService.productsByDate(id,name);
-        model.addAttribute("products",list);
-        model.addAttribute("name",name);
-        model.addAttribute("totalQuantity",list.stream().mapToInt(ProductsByDateDto::getQuantity).sum());
-        model.addAttribute("totalProfit",list.stream().mapToDouble(ProductsByDateDto::getProfit).sum());
-        model.addAttribute("pureProfit",list.stream().mapToDouble(ProductsByDateDto::getPureProfit).sum());
-        return "details";
-    }
 }
